@@ -1,0 +1,34 @@
+<!-- <!-- Load Video.js CSS and JS --> -->
+<!-- <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" /> -->
+<!-- <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<!-- Video.js Player Container -->
+
+
+<video id="carousel-video_html5_api" class="vjs-tech" data-sf-role="playVideo" loop="" playsinline="playsinline" autoplay="" muted style="display: block;" tabindex="-1">
+</video>
+
+<!-- Initialize Video.js -->
+<script>
+  const video = document.getElementById('carousel-video_html5_api');
+ const videoSrc = "https://storageconductordev.blob.core.windows.net/sitefinitystorage/playback_mobile_1mb.m3u8";
+ if (video.canPlayType('application/vnd.apple.mpegurl')) {
+   // ✅ Safari/iOS native HLS support
+   video.src = videoSrc;
+ } else if (Hls.isSupported()) {
+   // ✅ hls.js for Chrome, Firefox, Edge
+   const hls = new Hls({
+     enableWorker: true, // use web workers for performance
+     lowLatencyMode: true, // fast segment fetching
+     maxBufferLength: 30,  // cap buffer for faster load
+   });
+   hls.loadSource(videoSrc);
+   hls.attachMedia(video);
+   hls.on(Hls.Events.MANIFEST_PARSED, function () {
+     video.play();
+   });
+ } else {
+   alert("Your browser doesn't support HLS streaming.");
+ }
+</script>
